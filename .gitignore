@@ -1,0 +1,14 @@
+# Entorno virtual y archivos generados
+venv/
+__pycache__/
+*.pyc
+
+# Base de datos local (cada quien tiene la suya)
+*.db
+
+# Claves y secretos (NUNCA subir la API key)
+.env
+*.key
+
+# Capturas anteriores
+capturas_anteriores/

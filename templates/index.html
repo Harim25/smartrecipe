@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartRecipe</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="encabezado">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">SR</span>
+      <div>
+        <h1>SmartRecipe</h1>
+        <p>Cocina con lo que tienes y desperdicia menos.</p>
+      </div>
+    </div>
+    <nav class="menu" aria-label="Secciones">
+      <button id="nav-cocinar" class="pestana activa" type="button" aria-current="page">Cocinar</button>
+      <button id="nav-historial" class="pestana" type="button">Historial</button>
+      <button id="nav-favoritas" class="pestana" type="button">Favoritas</button>
+    </nav>
+    <span class="etiqueta-modo" title="En el Avance 2 se conectará el modelo de lenguaje">
+      Modo: {{ proveedor }}
+    </span>
+  </header>
+
+  <main id="vista-cocinar" class="contenedor">
+    <section class="tarjeta" aria-labelledby="t-cocina">
+      <h2 id="t-cocina">1. Tus ingredientes</h2>
+
+      <form id="form-ingrediente" class="fila" autocomplete="off">
+        <label class="sr-only" for="entrada-ingrediente">Ingrediente</label>
+        <input id="entrada-ingrediente" type="text" maxlength="40"
+               placeholder="Ej. pechuga de pollo">
+        <button type="submit" class="btn secundario">Agregar</button>
+      </form>
+
+      <ul id="lista-ingredientes" class="chips" aria-live="polite"></ul>
+      <p id="vacio-ingredientes" class="ayuda">Aún no agregas ingredientes.</p>
+
+      <div class="despensa">
+        <div class="despensa-titulo">
+          <h3>Mi despensa</h3>
+          <button id="btn-guardar-despensa" class="enlace" type="button">
+            Guardar los de arriba
+          </button>
+        </div>
+        <ul id="lista-despensa" class="chips claros"></ul>
+        <p id="vacio-despensa" class="ayuda">
+          Guarda tus ingredientes frecuentes para agregarlos con un clic.
+        </p>
+      </div>
+
+      <h2 id="t-comensales">2. Comensales</h2>
+      <div class="contador" role="group" aria-labelledby="t-comensales">
+        <button id="menos" class="btn-redondo" type="button" aria-label="Menos comensales">−</button>
+        <output id="comensales" aria-live="polite">2</output>
+        <button id="mas" class="btn-redondo" type="button" aria-label="Más comensales">+</button>
+      </div>
+
+      <button id="btn-generar" class="btn primario" type="button">Generar receta</button>
+      <p id="mensaje" class="mensaje" role="alert" hidden></p>
+    </section>
+
+    <section class="tarjeta receta-panel" aria-labelledby="t-receta">
+      <h2 id="t-receta">3. Tu receta</h2>
+      <div id="receta-vacia" class="estado-vacio">
+        <p>Agrega ingredientes y pulsa <strong>Generar receta</strong>.</p>
+      </div>
+      <article id="receta" hidden>
+        <div class="receta-cabecera">
+          <h3 id="r-titulo"></h3>
+          <button id="r-favorita" class="btn-fav" type="button" aria-pressed="false"
+                  aria-label="Marcar como favorita">☆</button>
+        </div>
+        <p class="meta"><span id="r-comensales"></span> · <span id="r-tiempo"></span></p>
+        <h4>Ingredientes</h4>
+        <ul id="r-ingredientes" class="lista-ing"></ul>
+        <h4>Preparación</h4>
+        <ol id="r-pasos" class="lista-pasos"></ol>
+        <p id="r-nota" class="nota"></p>
+      </article>
+    </section>
+
+  </main>
+
+  <main id="vista-lista" class="contenedor una-columna" hidden>
+    <section class="tarjeta" aria-labelledby="t-historial">
+      <h2 id="t-historial">Historial</h2>
+      <ul id="lista-historial" class="historial"></ul>
+      <p id="vacio-historial" class="ayuda">Todavía no hay recetas guardadas.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
