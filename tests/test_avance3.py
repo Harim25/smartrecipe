@@ -187,7 +187,7 @@ class TestAPI(unittest.TestCase):
 
 class TestPromptRefinado(unittest.TestCase):
     def test_incluye_las_reglas_del_avance_3(self):
-        for fragmento in ("proporcionales al número de comensales", "enteros o medios", '"cantidad": 0'):
+        for fragmento in ("proporcionales al número de comensales", "enteros o medios", "criterio culinario", '"cantidad": 0'):
             self.assertIn(fragmento, SYSTEM_PROMPT)
 
 

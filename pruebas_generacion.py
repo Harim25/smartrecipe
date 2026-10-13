@@ -93,24 +93,65 @@ def revisar(registro):
     return porcentaje, "; ".join(observaciones)
 
 
+# Ingredientes que en la cocina no se multiplican en proporción exacta: el aceite
+# para freír, los condimentos y los aromáticos. Se reportan, pero no cuentan como fallo.
+COMPLEMENTARIOS = ("aceite", "mantequilla", "cebolla", "ajo", "chile", "cilantro",
+                   "perejil", "epazote", "laurel", "orégano", "oregano", "comino", "limón", "limon")
+
+
+def es_complementario(nombre):
+    return any(palabra in nombre.lower() for palabra in COMPLEMENTARIOS)
+
+
+def cantidad_texto(ing):
+    """Texto de la cantidad como lo ve el usuario ("al gusto" no lleva número)."""
+    return "al gusto" if ing["unidad"] == "al gusto" else f"{ing['cantidad']} {ing['unidad']}"
+
+
 def comparar_escalado(por_id):
-    """C11b debería traer ~3 veces las cantidades de C11a (6 comensales / 2)."""
+    """C11b debería traer ~3 veces las cantidades de C11a (6 comensales / 2).
+
+    Solo se exige la proporción en los ingredientes principales; los
+    complementarios (aceite, aromáticos) deben aumentar, aunque sea menos.
+    """
     a, b = por_id.get("C11a"), por_id.get("C11b")
     if not a or not b or a["resultado"] != "OK" or b["resultado"] != "OK":
         return "No se pudo comparar (falta alguno de los dos casos)."
-    cantidades_a = {i["nombre"].lower(): i["cantidad"] for i in a["receta"]["ingredientes"] if i["cantidad"]}
-    lineas, buenos, total = [], 0, 0
+    # El modelo no siempre nombra igual un ingrediente ("pollo troceado" / "Pollo (cortado
+    # en dados)"), así que se comparan por el ingrediente del usuario que contienen.
+    def clave(nombre):
+        nombre = nombre.lower()
+        for enviado in a["ingredientes_enviados"]:
+            if enviado in nombre:
+                return enviado
+        return nombre
+
+    cantidades_a = {clave(i["nombre"]): i["cantidad"] for i in a["receta"]["ingredientes"] if i["cantidad"]}
+    lineas, buenos, total, comp_ok, comp_total = [], 0, 0, 0, 0
     for ing in b["receta"]["ingredientes"]:
-        base = cantidades_a.get(ing["nombre"].lower())
+        base = cantidades_a.get(clave(ing["nombre"]))
         if base and ing["cantidad"]:
             razon = ing["cantidad"] / base
-            ok = 2.4 <= razon <= 3.6
-            total += 1
-            buenos += ok
-            lineas.append(f"- {ing['nombre']}: {base} → {ing['cantidad']} {ing['unidad']} (x{razon:.1f}) {'✓' if ok else '✗'}")
-    if not total:
+            if es_complementario(ing["nombre"]):
+                ok = razon > 1  # basta con que aumente
+                comp_total += 1
+                comp_ok += ok
+                tipo = "complementario: debe aumentar"
+            else:
+                ok = 2.4 <= razon <= 3.6
+                total += 1
+                buenos += ok
+                tipo = "principal: debe triplicarse"
+            lineas.append(
+                f"- {ing['nombre']}: {base} → {ing['cantidad']} {ing['unidad']} "
+                f"(x{razon:.1f}) {'✓' if ok else '✗'} ({tipo})"
+            )
+    if not total and not comp_total:
         return "No hay ingredientes comparables entre las dos recetas."
-    return f"{buenos} de {total} ingredientes escalan ≈3 veces.\n\n" + "\n".join(lineas)
+    return (
+        f"{buenos} de {total} ingredientes principales escalan ≈3 veces; "
+        f"{comp_ok} de {comp_total} complementarios aumentan.\n\n" + "\n".join(lineas)
+    )
 
 
 def escribir_resultados(registros, escalado):
@@ -152,7 +193,7 @@ def escribir_resultados(registros, escalado):
         rec = r["receta"]
         if rec:
             lineas += ["", f"**{rec['titulo']}** ({rec['tiempo_minutos']} min)", "", "Ingredientes:"]
-            lineas += [f"- {i['nombre']}: {i['cantidad']} {i['unidad']}" for i in rec["ingredientes"]]
+            lineas += [f"- {i['nombre']}: {cantidad_texto(i)}" for i in rec["ingredientes"]]
             lineas += ["", "Pasos:"] + [f"{n}. {p}" for n, p in enumerate(rec["pasos"], 1)]
             if rec.get("nota"):
                 lineas += ["", f"Nota del modelo: {rec['nota']}"]
@@ -172,7 +213,7 @@ def main():
     archivo = Path(__file__).with_name("resultados_pruebas") / "resultados.json"
     if pedidos and archivo.exists():
         previos = {r["id"]: r for r in json.loads(archivo.read_text(encoding="utf-8"))}
-    casos = [c for c in CASOS if not pedidos or c[0] in pedidos]
+    casos = [c for c in CASOS if not pedidos or c[0].upper() in pedidos]  # C11a == c11A
 
     nuevos = {}
     for n, caso in enumerate(casos, 1):
