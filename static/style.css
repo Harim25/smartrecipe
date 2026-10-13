@@ -178,3 +178,5 @@ input[type="text"]:focus-visible, button:focus-visible {
   .contenedor { grid-template-columns: 1fr; }
   .item-historial { flex-direction: column; align-items: stretch; }
 }
+
+.origen { margin: 8px 0 0; font-size: .8rem; color: var(--suave); }

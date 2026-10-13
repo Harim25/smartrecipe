@@ -159,6 +159,19 @@ function mostrarReceta(fila) {
   );
   $("r-nota").textContent = r.nota || "";
   $("r-nota").hidden = !r.nota;
+
+  // Origen de la receta: modelo y tiempo de respuesta (evidencia de que viene del LLM).
+  const meta = r.meta;
+  const origen = $("r-origen");
+  if (meta) {
+    origen.textContent =
+      meta.proveedor === "gemini"
+        ? `Generada con ${meta.modelo} en ${meta.segundos} s`
+        : "Generada en modo simulado (sin IA)";
+  } else {
+    origen.textContent = "";
+  }
+  origen.hidden = !meta;
   pintarFavoritaActual();
 }
 

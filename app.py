@@ -1,4 +1,4 @@
-"""SmartRecipe - Avance 1: servidor Flask (API + interfaz).
+"""SmartRecipe - Avance 2: servidor Flask (API + interfaz) conectado a Gemini.
 
 Ejecutar:  python app.py   y abrir http://127.0.0.1:5000
 """
@@ -23,7 +23,7 @@ def _error(mensaje, codigo=400):
 
 @app.get("/")
 def inicio():
-    return render_template("index.html", proveedor=llm_service.PROVEEDOR)
+    return render_template("index.html", proveedor=llm_service.descripcion_modo())
 
 
 # ---------- Generar receta ----------
@@ -39,7 +39,7 @@ def generar():
     try:
         receta = llm_service.generar_receta(ingredientes, comensales)
     except llm_service.ErrorGeneracion as e:
-        return _error(str(e), 502)
+        return _error(str(e), e.codigo_http)
 
     return jsonify(db.guardar_receta(ingredientes, receta)), 201
 

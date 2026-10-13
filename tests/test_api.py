@@ -1,4 +1,4 @@
-"""Pruebas automáticas del Avance 1. Ejecutar:  python -m unittest discover -s tests -v"""
+"""Pruebas automáticas de la API y la validación (modo simulado). Ejecutar:  python -m unittest discover -s tests -v"""
 import os
 import sys
 import tempfile
@@ -9,6 +9,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import database  # noqa: E402
 from app import app  # noqa: E402
+import llm_service  # noqa: E402
+
+# Estas pruebas deben usar siempre el generador simulado: así no consumen la
+# cuota de Gemini ni dependen de internet (las pruebas de Gemini están en test_llm.py).
+llm_service.PROVEEDOR = "simulado"
 from validacion import (  # noqa: E402
     ErrorValidacion, limpiar_ingrediente, limpiar_lista_ingredientes, validar_comensales,
 )
