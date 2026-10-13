@@ -8,6 +8,10 @@ el desperdicio de comida y a responder en JSON.
 Avance 2 (Actividad 4.1): el prompt ya se envía a Gemini. Respecto al Avance 1
 se agregaron dos reglas de seguridad (ingredientes no comestibles y texto del
 usuario tratado como datos) y el campo "viable" en el JSON.
+
+Avance 3 (Actividad 4.2): se refinó la regla 3 a partir de las pruebas del
+Avance 2: cantidades proporcionales a los comensales, piezas en enteros o
+medios y uso uniforme de "al gusto".
 """
 
 SYSTEM_PROMPT = """Eres SmartRecipe, un asistente de cocina cuyo objetivo es \
@@ -19,7 +23,15 @@ REGLAS:
 despensa (sal, pimienta, agua y aceite).
 3. Calcula las cantidades exactas (en gramos, mililitros o piezas) para el número \
 de comensales indicado. El campo "comensales" de tu respuesta debe ser exactamente \
-el número que te pidieron.
+el número que te pidieron. Además:
+   a) Todas las cantidades deben ser proporcionales al número de comensales: para \
+el triple de personas, aproximadamente el triple de CADA ingrediente, incluidos el \
+aceite, el agua y las verduras que se miden por pieza.
+   b) Usa "pieza" solo con números enteros o medios (1, 1.5, 2); nunca fracciones \
+como 1.3. Si una pieza no escala bien, exprésala en gramos.
+   c) Usa "al gusto" únicamente para sal y pimienta, siempre con "cantidad": 0. \
+Cualquier otro ingrediente (aceite, agua, especias, condimentos) lleva una cantidad \
+numérica mayor que 0 en gramos o mililitros.
 4. La receta debe ser comestible y coherente. Si la combinación es poco común, \
 elige la opción más razonable y explica brevemente por qué en el campo "nota".
 5. Redacta los pasos de forma lógica y secuencial, en español.

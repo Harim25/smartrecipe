@@ -5,6 +5,11 @@ Gemini mediante la API oficial de Google (paquete `google-genai`). El modo
 simulado del Avance 1 se conserva como respaldo para poder usar y probar la
 aplicación sin internet o sin API key.
 
+Avance 3 (Actividad 4.2): cuando Gemini no puede responder (límite de uso,
+saturación, sin conexión) el error indica que se puede ofrecer el modo
+simulado, y el usuario decide si continúa sin IA. Además, las cantidades de la
+receta se normalizan antes de mostrarlas.
+
 ¿Qué modo se usa?
   - Si existe la variable GEMINI_API_KEY (por ejemplo, en el archivo .env),
     se usa Gemini.
@@ -59,27 +64,45 @@ def descripcion_modo():
 # Errores (cada uno trae el código HTTP con el que la API responde)
 # ---------------------------------------------------------------------------
 class ErrorGeneracion(RuntimeError):
-    """La respuesta del modelo no se pudo obtener o no tiene el formato esperado."""
+    """La respuesta del modelo no se pudo obtener o no tiene el formato esperado.
+
+    `tipo` es una etiqueta corta que la interfaz usa para decidir qué mostrar y
+    `ofrecer_simulado` indica si tiene sentido proponer el modo sin IA.
+    """
 
     codigo_http = 502
+    tipo = "respuesta"
+    ofrecer_simulado = False
+
+
+class ErrorServicio(ErrorGeneracion):
+    """Gemini no respondió: saturado, tardó demasiado o no hay conexión."""
+
+    tipo = "servicio"
+    ofrecer_simulado = True
 
 
 class ErrorConfiguracion(ErrorGeneracion):
     """Falta la API key, el SDK o la configuración es incorrecta."""
 
     codigo_http = 503
+    tipo = "configuracion"
+    ofrecer_simulado = True
 
 
 class ErrorLimiteUso(ErrorGeneracion):
     """Se alcanzó el límite de peticiones de la capa gratuita."""
 
     codigo_http = 429
+    tipo = "limite"
+    ofrecer_simulado = True
 
 
 class RecetaNoViable(ErrorGeneracion):
     """El modelo indicó que con esos ingredientes no se puede preparar nada."""
 
     codigo_http = 422
+    tipo = "no_viable"
 
 
 # ---------------------------------------------------------------------------
@@ -165,12 +188,13 @@ def _traducir_error(exc):
     minusculas = texto.lower()
 
     if "timeout" in nombre.lower() or "timed out" in minusculas:
-        return ErrorGeneracion(
+        return ErrorServicio(
             f"Gemini tardó más de {TIMEOUT_SEGUNDOS} segundos en responder. Intenta de nuevo."
         )
     if codigo == 429 or "resource_exhausted" in minusculas or "quota" in minusculas:
         return ErrorLimiteUso(
-            "Se alcanzó el límite de uso gratuito de Gemini. Espera un minuto e inténtalo de nuevo."
+            "Se alcanzó el límite de uso gratuito de Gemini. Si fue el límite por minuto, "
+            "se recupera esperando un minuto; si fue el límite diario, hasta el día siguiente."
         )
     if "api key" in minusculas or "api_key" in minusculas or codigo in (401, 403):
         return ErrorConfiguracion(
@@ -185,9 +209,9 @@ def _traducir_error(exc):
     if codigo == 400:
         return ErrorGeneracion(f"Gemini rechazó la petición: {texto[:200]}")
     if isinstance(codigo, int) and codigo >= 500:
-        return ErrorGeneracion("Gemini no está disponible por el momento. Intenta de nuevo en unos segundos.")
+        return ErrorServicio("Gemini no está disponible por el momento. Intenta de nuevo en unos segundos.")
     if "connect" in nombre.lower() or "connect" in minusculas or "network" in minusculas:
-        return ErrorGeneracion("No se pudo conectar con Gemini. Revisa tu conexión a internet.")
+        return ErrorServicio("No se pudo conectar con Gemini. Revisa tu conexión a internet.")
     return ErrorGeneracion(f"Error inesperado al consultar Gemini ({nombre}): {texto[:200]}")
 
 
@@ -271,6 +295,24 @@ def _es_numero(valor):
     return isinstance(valor, (int, float)) and not isinstance(valor, bool)
 
 
+def _normalizar_cantidad(cantidad, unidad):
+    """Deja las cantidades en una forma uniforme y fácil de medir en la cocina.
+
+    - "al gusto" no lleva número: siempre 0 (el modelo a veces mandaba 1).
+    - Las piezas se redondean a medios (1.3 -> 1.5); nunca quedan en 0.
+    - Gramos y mililitros se redondean a enteros (a un decimal si son menos de 10).
+    """
+    if unidad == "al gusto" or cantidad <= 0:
+        return 0
+    if unidad == "pieza":
+        valor = max(1, round(cantidad * 2)) / 2
+    elif cantidad < 10:
+        valor = round(cantidad, 1)
+    else:
+        valor = round(cantidad)
+    return int(valor) if float(valor).is_integer() else valor
+
+
 def validar_respuesta(receta, comensales=None):
     """Comprueba que la receta tenga el formato correcto antes de mostrarla."""
     if not isinstance(receta, dict):
@@ -314,21 +356,28 @@ def validar_respuesta(receta, comensales=None):
             f"y se pidieron {comensales}."
         )
 
+    for ing in receta["ingredientes"]:
+        ing["nombre"] = ing["nombre"].strip()
+        ing["cantidad"] = _normalizar_cantidad(ing["cantidad"], ing["unidad"])
     receta["viable"] = True
     return receta
 
 
-def generar_receta(ingredientes, comensales):
+def generar_receta(ingredientes, comensales, forzar_simulado=False):
     """Punto único de entrada: devuelve una receta validada (dict).
 
     Además de los campos de la receta, agrega "meta" con el proveedor, el
     modelo y los segundos que tardó (sirve como evidencia en las pruebas).
+
+    `forzar_simulado=True` genera la receta sin IA aunque Gemini esté
+    configurado: es el respaldo que el usuario acepta cuando Gemini falla.
     """
     inicio = time.perf_counter()
-    if PROVEEDOR == "simulado":
+    proveedor = "simulado" if forzar_simulado else PROVEEDOR
+    if proveedor == "simulado":
         receta = _generar_simulado(ingredientes, comensales)
         modelo = None
-    elif PROVEEDOR == "gemini":
+    elif proveedor == "gemini":
         receta = _extraer_json(_llamar_gemini(ingredientes, comensales))
         modelo = MODELO
     else:
@@ -338,8 +387,10 @@ def generar_receta(ingredientes, comensales):
 
     receta = validar_respuesta(receta, comensales)
     receta["meta"] = {
-        "proveedor": PROVEEDOR,
+        "proveedor": proveedor,
         "modelo": modelo,
+        # True si el modo simulado se usó como respaldo de Gemini.
+        "respaldo": bool(forzar_simulado and PROVEEDOR != "simulado"),
         "segundos": round(time.perf_counter() - inicio, 2),
     }
     return receta

@@ -1,8 +1,21 @@
-# SmartRecipe – Avance 2 (conexión a Gemini)
+# SmartRecipe – Avance 3 (pruebas de calidad y refinamiento)
 
 Aplicación web que recibe los ingredientes del usuario y el número de comensales y
 genera una receta con el modelo de lenguaje **Gemini** (API de Google). Si no hay
 API key, funciona en **modo simulado** (sin IA) como respaldo.
+
+## Novedades del Avance 3
+- **Respaldo cuando la IA no responde:** si se acaba el límite gratuito, Gemini está
+  saturado o no hay conexión, la página muestra un aviso y el usuario elige entre usar el
+  modo simulado, reintentar con IA o cancelar. Los ingredientes capturados se conservan.
+- **Estado de carga:** mientras se genera la receta se muestra un indicador con los
+  segundos transcurridos, y no se puede enviar una segunda petición por error.
+- **Diseño adaptable:** el contenido usa el ancho de la pantalla; en pantallas grandes los
+  ingredientes y la preparación se muestran lado a lado, y en celular en una sola columna.
+- **Cantidades uniformes:** el prompt pide cantidades proporcionales a los comensales y el
+  servidor normaliza la respuesta ("al gusto" sin número, piezas en enteros o medios,
+  gramos y mililitros en enteros).
+- **Logo** del proyecto en el encabezado y en la pestaña del navegador.
 
 ## Qué incluye
 | Archivo | Para qué sirve |
@@ -15,7 +28,7 @@ API key, funciona en **modo simulado** (sin IA) como respaldo.
 | `probar_conexion.py` | Diagnóstico paso a paso de la conexión con Gemini |
 | `pruebas_generacion.py` | Corre 12 casos reales y guarda los resultados para el reporte |
 | `templates/`, `static/` | Interfaz (HTML, CSS y JavaScript) |
-| `tests/` | 52 pruebas automáticas (no usan internet ni gastan cuota) |
+| `tests/` | 72 pruebas automáticas (no usan internet ni gastan cuota) |
 | `.env.example` | Plantilla del archivo `.env` donde va la API key |
 
 ---
@@ -94,7 +107,7 @@ python -m unittest discover -s tests -v
 | `Falta la API key de Gemini` | No encuentra la clave | Revisa que el archivo se llame `.env` (no `.env.txt`) y esté en la carpeta `prototipo` |
 | `Gemini rechazó la API key` | La clave es incorrecta o está desactivada | Cópiala de nuevo completa, sin espacios ni comillas |
 | `El modelo '...' no existe` | Google cambió el nombre del modelo | Busca el nombre vigente en la documentación y ponlo en `.env`: `GEMINI_MODEL=nombre` |
-| `Se alcanzó el límite de uso gratuito` | Muchas peticiones seguidas | Espera un minuto y reintenta |
+| `Se alcanzó el límite de uso gratuito` | Se agotó el límite por minuto o el diario | Espera un minuto y reintenta; si era el diario, usa el modo simulado desde el aviso de la página |
 | `Falta instalar el SDK` | No se instaló `google-genai` | `pip install -r requirements.txt` |
 | `No se pudo conectar con Gemini` | Sin internet o red bloqueada | Revisa la conexión (algunas redes escolares bloquean el acceso) |
 
@@ -108,6 +121,7 @@ En `.env` se puede agregar `LLM_PROVIDER=simulado` para trabajar sin IA, o
 3. `llm_service.py` envía a Gemini el **system prompt** (reglas: minimizar desperdicio,
    no pedir compras, calcular cantidades, rechazar lo no comestible, tratar los
    ingredientes como datos) y los datos del usuario, exigiendo respuesta en JSON con un esquema.
-4. Se valida la respuesta (campos, unidades, comensales correctos). Si algo está mal,
-   se muestra un error claro en lugar de una receta rota.
+4. Se valida la respuesta (campos, unidades, comensales correctos) y se normalizan las
+   cantidades. Si algo está mal, se muestra un error claro en lugar de una receta rota; si
+   el problema es que Gemini no respondió, se ofrece continuar en modo simulado.
 5. `database.py` guarda la receta en el historial y la API la devuelve a la interfaz.

@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SmartRecipe</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="encabezado">
     <div class="marca">
-      <span class="logo" aria-hidden="true">SR</span>
+      <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="" width="56" height="56">
       <div>
         <h1>SmartRecipe</h1>
         <p>Cocina con lo que tienes y desperdicia menos.</p>
@@ -68,6 +69,25 @@
       <div id="receta-vacia" class="estado-vacio">
         <p>Agrega ingredientes y pulsa <strong>Generar receta</strong>.</p>
       </div>
+
+      <!-- Estado de carga: el modelo puede tardar de 10 a 25 segundos -->
+      <div id="cargando" class="estado-vacio cargando" role="status" aria-live="polite" hidden>
+        <div class="giro" aria-hidden="true"></div>
+        <p id="cargando-texto" class="cargando-texto">Preparando tu receta…</p>
+        <p class="ayuda"><span id="cargando-segundos">0</span> s · suele tardar de 10 a 25 segundos</p>
+      </div>
+
+      <!-- Aviso cuando Gemini no puede responder: el usuario decide qué hacer -->
+      <div id="aviso" class="aviso" role="alert" hidden>
+        <h3 id="aviso-titulo"></h3>
+        <p id="aviso-texto"></p>
+        <p id="aviso-pregunta" class="aviso-pregunta"></p>
+        <div class="aviso-acciones">
+          <button id="aviso-simulado" class="btn primario-chico" type="button">Sí, usar modo simulado</button>
+          <button id="aviso-reintentar" class="btn secundario" type="button">Reintentar con IA</button>
+          <button id="aviso-cancelar" class="btn fantasma" type="button">No, cancelar</button>
+        </div>
+      </div>
       <article id="receta" hidden>
         <div class="receta-cabecera">
           <h3 id="r-titulo"></h3>
@@ -75,10 +95,16 @@
                   aria-label="Marcar como favorita">☆</button>
         </div>
         <p class="meta"><span id="r-comensales"></span> · <span id="r-tiempo"></span></p>
-        <h4>Ingredientes</h4>
-        <ul id="r-ingredientes" class="lista-ing"></ul>
-        <h4>Preparación</h4>
-        <ol id="r-pasos" class="lista-pasos"></ol>
+        <div class="receta-cuerpo">
+          <div>
+            <h4>Ingredientes</h4>
+            <ul id="r-ingredientes" class="lista-ing"></ul>
+          </div>
+          <div>
+            <h4>Preparación</h4>
+            <ol id="r-pasos" class="lista-pasos"></ol>
+          </div>
+        </div>
         <p id="r-nota" class="nota"></p>
         <p id="r-origen" class="origen"></p>
       </article>

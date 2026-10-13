@@ -11,6 +11,8 @@
   --chip: #f4e7d3;
   --error: #b3261e;
   --radio: 14px;
+  /* Ancho del contenido: crece con la pantalla en lugar de quedarse fijo. */
+  --ancho: min(1560px, 94vw);
 }
 
 * { box-sizing: border-box; }
@@ -34,16 +36,12 @@ body {
 .encabezado {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; flex-wrap: wrap;
-  padding: 18px max(16px, calc((100% - 1040px) / 2));
+  padding: 14px max(16px, calc((100% - var(--ancho)) / 2));
   background: var(--tarjeta);
   border-bottom: 1px solid var(--borde);
 }
 .marca { display: flex; align-items: center; gap: 14px; }
-.logo {
-  display: grid; place-items: center; width: 46px; height: 46px;
-  border-radius: 12px; background: var(--acento); color: #fff;
-  font-weight: 700; letter-spacing: .5px;
-}
+.logo { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; }
 .marca h1 { margin: 0; font-size: 1.35rem; }
 .marca p { margin: 0; color: var(--suave); font-size: .9rem; }
 .etiqueta-modo {
@@ -52,8 +50,10 @@ body {
 }
 
 .contenedor {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-  max-width: 1040px; margin: 24px auto; padding: 0 16px;
+  display: grid; gap: 20px; align-items: start;
+  /* Los datos de entrada ocupan un ancho cómodo y la receta se queda con el resto. */
+  grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+  max-width: var(--ancho); margin: 24px auto; padding: 0 16px;
 }
 .ancho { grid-column: 1 / -1; }
 
@@ -174,9 +174,48 @@ input[type="text"]:focus-visible, button:focus-visible {
 }
 .mini:hover { background: var(--chip); }
 
+/* ---------- Receta: en pantallas anchas, ingredientes y pasos lado a lado ---------- */
+.receta-panel { container-type: inline-size; }
+.receta-cuerpo { display: grid; gap: 0 32px; }
+@container (min-width: 680px) {
+  .receta-cuerpo { grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr); }
+}
+
+/* ---------- Estado de carga ---------- */
+.cargando { align-content: center; gap: 4px; }
+.cargando-texto { margin: 12px 0 0; font-weight: 600; color: var(--texto); }
+.giro {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 4px solid var(--chip); border-top-color: var(--acento);
+  animation: giro .9s linear infinite;
+}
+@keyframes giro { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .giro { animation-duration: 3s; } }
+
+/* ---------- Aviso con opciones ---------- */
+.aviso {
+  border: 1px solid #ecc9a0; background: #fff8ec; border-radius: 12px; padding: 20px;
+}
+.aviso h3 { font-size: 1.1rem; }
+.aviso p { margin: 8px 0 0; }
+.aviso-pregunta { font-weight: 600; }
+.aviso-acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.btn.primario-chico { background: var(--acento); color: #fff; }
+.btn.primario-chico:hover { background: var(--acento-osc); }
+.btn.fantasma { background: none; border: 1px solid var(--borde); color: var(--texto); }
+.btn.fantasma:hover { background: var(--chip); }
+
+/* ---------- Pantallas medianas y chicas ---------- */
+@media (max-width: 1000px) {
+  .contenedor { grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); }
+}
 @media (max-width: 760px) {
-  .contenedor { grid-template-columns: 1fr; }
+  .contenedor { grid-template-columns: 1fr; margin: 16px auto; }
   .item-historial { flex-direction: column; align-items: stretch; }
+  .encabezado { justify-content: center; }
+  .marca p { display: none; }
+  .tarjeta { padding: 16px; }
+  .aviso-acciones .btn { flex: 1 1 100%; }
 }
 
 .origen { margin: 8px 0 0; font-size: .8rem; color: var(--suave); }

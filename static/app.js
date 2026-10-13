@@ -1,4 +1,4 @@
-// SmartRecipe - Avance 1: lógica de la interfaz.
+// SmartRecipe: lógica de la interfaz.
 // Todo el texto dinámico se inserta con textContent (nunca innerHTML)
 // para evitar que lo escrito por el usuario se ejecute como código.
 
@@ -7,6 +7,7 @@ const estado = {
   comensales: 2,
   recetaActual: null,    // última receta mostrada
   pestana: "cocinar",    // "cocinar" | "historial" | "favoritas"
+  generando: false,      // evita enviar dos peticiones a la vez
 };
 
 const $ = (id) => document.getElementById(id);
@@ -19,7 +20,13 @@ async function api(url, opciones = {}) {
   });
   if (resp.status === 204) return null;
   const datos = await resp.json();
-  if (!resp.ok) throw new Error(datos.error || "Ocurrió un error.");
+  if (!resp.ok) {
+    // Se conservan los datos del error (tipo, ofrecer_simulado) para decidir qué mostrar.
+    const error = new Error(datos.error || "Ocurrió un error.");
+    error.tipo = datos.tipo;
+    error.ofrecerSimulado = !!datos.ofrecer_simulado;
+    throw error;
+  }
   return datos;
 }
 
@@ -129,11 +136,22 @@ function formatoCantidad(ing) {
   return `${ing.cantidad} ${ing.unidad}`;
 }
 
+// El panel derecho muestra una sola cosa a la vez.
+function mostrarPanel(nombre) {
+  for (const id of ["receta-vacia", "cargando", "aviso", "receta"]) {
+    $(id).hidden = id !== nombre;
+  }
+}
+
+// Vuelve a lo que había antes de generar: la receta anterior o el panel vacío.
+function restaurarPanel() {
+  mostrarPanel(estado.recetaActual ? "receta" : "receta-vacia");
+}
+
 function mostrarReceta(fila) {
   estado.recetaActual = fila;
   const r = fila.receta;
-  $("receta-vacia").hidden = true;
-  $("receta").hidden = false;
+  mostrarPanel("receta");
   $("r-titulo").textContent = r.titulo;
   $("r-comensales").textContent = `${r.comensales} ${r.comensales === 1 ? "comensal" : "comensales"}`;
   $("r-tiempo").textContent = `${r.tiempo_minutos} min`;
@@ -164,10 +182,13 @@ function mostrarReceta(fila) {
   const meta = r.meta;
   const origen = $("r-origen");
   if (meta) {
-    origen.textContent =
-      meta.proveedor === "gemini"
-        ? `Generada con ${meta.modelo} en ${meta.segundos} s`
-        : "Generada en modo simulado (sin IA)";
+    if (meta.proveedor === "gemini") {
+      origen.textContent = `Generada con ${meta.modelo} en ${meta.segundos} s`;
+    } else if (meta.respaldo) {
+      origen.textContent = "Generada en modo simulado (sin IA) porque Gemini no estaba disponible";
+    } else {
+      origen.textContent = "Generada en modo simulado (sin IA)";
+    }
   } else {
     origen.textContent = "";
   }
@@ -183,27 +204,93 @@ function pintarFavoritaActual() {
   btn.setAttribute("aria-label", fav ? "Quitar de favoritas" : "Marcar como favorita");
 }
 
-async function generarReceta() {
+// ---------- Estado de carga ----------
+const MENSAJES_CARGA = [
+  "Preparando tu receta…",
+  "Revisando tus ingredientes…",
+  "Calculando las cantidades…",
+  "Ordenando los pasos…",
+  "Ya casi está lista…",
+];
+let relojCarga = null;
+
+function iniciarCarga(conIA) {
+  mostrarPanel("cargando");
+  const inicio = Date.now();
+  const pintar = () => {
+    const seg = Math.floor((Date.now() - inicio) / 1000);
+    $("cargando-segundos").textContent = seg;
+    // Cambia el mensaje cada 5 segundos para que se note que sigue trabajando.
+    $("cargando-texto").textContent = conIA
+      ? MENSAJES_CARGA[Math.min(Math.floor(seg / 5), MENSAJES_CARGA.length - 1)]
+      : "Preparando tu receta…";
+  };
+  pintar();
+  relojCarga = setInterval(pintar, 1000);
+}
+
+function detenerCarga() {
+  clearInterval(relojCarga);
+  relojCarga = null;
+}
+
+// ---------- Aviso cuando Gemini no puede responder ----------
+const TITULOS_AVISO = {
+  limite: "Se acabó el uso gratuito de la IA por ahora",
+  servicio: "La IA no está disponible en este momento",
+  configuracion: "La IA no está configurada",
+};
+
+function mostrarAviso(error) {
+  $("aviso-titulo").textContent = TITULOS_AVISO[error.tipo] || "No se pudo generar la receta";
+  $("aviso-texto").textContent = error.message;
+  $("aviso-pregunta").textContent =
+    "¿Quieres continuar en modo simulado (sin IA)? La receta será una versión básica hecha con reglas simples.";
+  // Si falta configurar la IA, reintentar no sirve de nada.
+  $("aviso-reintentar").hidden = error.tipo === "configuracion";
+  mostrarPanel("aviso");
+  $("aviso-simulado").focus();
+}
+
+function cancelarAviso() {
+  // Los ingredientes y los comensales se conservan tal como estaban.
+  restaurarPanel();
+  mostrarMensaje("");
+}
+
+// ---------- Generar ----------
+async function generarReceta(modo = "auto") {
+  if (estado.generando) return; // ya hay una petición en curso
   if (!estado.ingredientes.length) {
     mostrarMensaje("Agrega al menos un ingrediente.");
     return;
   }
   const boton = $("btn-generar");
+  estado.generando = true;
   boton.disabled = true;
   boton.textContent = "Generando…";
   mostrarMensaje("");
+  iniciarCarga(modo !== "simulado");
   try {
-    const fila = await api("/api/receta", {
-      method: "POST",
-      body: JSON.stringify({
-        ingredientes: estado.ingredientes,
-        comensales: estado.comensales,
-      }),
-    });
+    const cuerpo = { ingredientes: estado.ingredientes, comensales: estado.comensales };
+    if (modo === "simulado") cuerpo.modo = "simulado";
+    const fila = await api("/api/receta", { method: "POST", body: JSON.stringify(cuerpo) });
     mostrarReceta(fila);
   } catch (e) {
-    mostrarMensaje(e.message);
+    if (e.ofrecerSimulado) {
+      mostrarAviso(e);
+    } else {
+      restaurarPanel();
+      // TypeError = el navegador no pudo comunicarse con el servidor de la aplicación.
+      mostrarMensaje(
+        e instanceof TypeError
+          ? "No se pudo contactar al servidor de SmartRecipe. Revisa que la aplicación siga abierta."
+          : e.message
+      );
+    }
   } finally {
+    detenerCarga();
+    estado.generando = false;
     boton.disabled = false;
     boton.textContent = "Generar receta";
   }
@@ -259,8 +346,7 @@ async function cargarHistorial() {
           await api(`/api/recetas/${fila.id}`, { method: "DELETE" });
           if (estado.recetaActual && estado.recetaActual.id === fila.id) {
             estado.recetaActual = null;
-            $("receta").hidden = true;
-            $("receta-vacia").hidden = false;
+            mostrarPanel("receta-vacia");
           }
           cargarHistorial();
         })
@@ -304,7 +390,10 @@ $("form-ingrediente").addEventListener("submit", (e) => {
 });
 $("menos").addEventListener("click", () => cambiarComensales(-1));
 $("mas").addEventListener("click", () => cambiarComensales(1));
-$("btn-generar").addEventListener("click", generarReceta);
+$("btn-generar").addEventListener("click", () => generarReceta());
+$("aviso-simulado").addEventListener("click", () => generarReceta("simulado"));
+$("aviso-reintentar").addEventListener("click", () => generarReceta());
+$("aviso-cancelar").addEventListener("click", cancelarAviso);
 $("btn-guardar-despensa").addEventListener("click", guardarEnDespensa);
 $("r-favorita").addEventListener("click", alternarFavoritaActual);
 $("nav-cocinar").addEventListener("click", () => cambiarPestana("cocinar"));

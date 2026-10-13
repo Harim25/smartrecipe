@@ -1,4 +1,4 @@
-"""SmartRecipe - Avance 2: servidor Flask (API + interfaz) conectado a Gemini.
+"""SmartRecipe - Avance 3: servidor Flask (API + interfaz) conectado a Gemini.
 
 Ejecutar:  python app.py   y abrir http://127.0.0.1:5000
 """
@@ -36,10 +36,15 @@ def generar():
     except ErrorValidacion as e:
         return _error(str(e))
 
+    # El usuario puede pedir el modo simulado cuando Gemini no está disponible.
+    forzar_simulado = datos.get("modo") == "simulado"
     try:
-        receta = llm_service.generar_receta(ingredientes, comensales)
+        receta = llm_service.generar_receta(ingredientes, comensales, forzar_simulado)
     except llm_service.ErrorGeneracion as e:
-        return _error(str(e), e.codigo_http)
+        return (
+            jsonify({"error": str(e), "tipo": e.tipo, "ofrecer_simulado": e.ofrecer_simulado}),
+            e.codigo_http,
+        )
 
     return jsonify(db.guardar_receta(ingredientes, receta)), 201
 
