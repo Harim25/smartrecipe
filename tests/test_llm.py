@@ -238,6 +238,8 @@ class TestAPIConGemini(unittest.TestCase):
         database.RUTA_DB = Path(self.tmp.name)
         database.iniciar_db()
         self.c = app.test_client()
+        # Las rutas de datos exigen sesión: cada prueba usa una cuenta nueva.
+        self.c.post("/api/registro", json={"usuario": "prueba", "password": "clave-segura-1"})
 
     def tearDown(self):
         os.unlink(self.tmp.name)

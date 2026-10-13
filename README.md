@@ -4,6 +4,18 @@ Aplicación web que recibe los ingredientes del usuario y el número de comensal
 genera una receta con el modelo de lenguaje **Gemini** (API de Google). Si no hay
 API key, funciona en **modo simulado** (sin IA) como respaldo.
 
+## Cuentas de usuario
+Para usar la aplicación hay que crear una cuenta (usuario y contraseña). Cada cuenta tiene
+su propia despensa, historial y favoritas; nadie puede ver ni borrar los datos de otra.
+
+- La contraseña se guarda **cifrada con hash y sal**; no se puede leer ni desde la base de datos.
+- La sesión dura 7 días en el navegador y se cierra con **Cerrar sesión**.
+- Tras 5 intentos fallidos seguidos, la cuenta se bloquea un minuto.
+- **No hay recuperación de contraseña** (no se pide correo): si se olvida, hay que crear otra cuenta.
+- Si ya tenías recetas guardadas de una versión anterior, pasan a la **primera cuenta** que se registre.
+- La clave que firma las sesiones se genera sola en el archivo `.clave_sesion` (ignorado por
+  Git). Para un servidor público conviene definirla con la variable `SECRET_KEY` y usar HTTPS.
+
 ## Novedades del Avance 3
 - **Respaldo cuando la IA no responde:** si se acaba el límite gratuito, Gemini está
   saturado o no hay conexión, la página muestra un aviso y el usuario elige entre usar el
@@ -22,13 +34,14 @@ API key, funciona en **modo simulado** (sin IA) como respaldo.
 |---|---|
 | `app.py` | Servidor Flask: rutas de la API y página principal |
 | `validacion.py` | Limpieza y validación de lo que escribe el usuario |
-| `database.py` | Base de datos SQLite: despensa, historial y favoritas |
+| `cuentas.py` | Cuentas de usuario: registro, inicio de sesión y bloqueo por intentos fallidos |
+| `database.py` | Base de datos SQLite: usuarios, y la despensa, el historial y las favoritas de cada uno |
 | `prompts.py` | System prompt, plantilla del mensaje y esquema JSON de la respuesta |
 | `llm_service.py` | Conexión a Gemini, manejo de errores y validación de la respuesta (+ modo simulado) |
 | `probar_conexion.py` | Diagnóstico paso a paso de la conexión con Gemini |
 | `pruebas_generacion.py` | Corre 12 casos reales y guarda los resultados para el reporte |
 | `templates/`, `static/` | Interfaz (HTML, CSS y JavaScript) |
-| `tests/` | 72 pruebas automáticas (no usan internet ni gastan cuota) |
+| `tests/` | 89 pruebas automáticas (no usan internet ni gastan cuota) |
 | `.env.example` | Plantilla del archivo `.env` donde va la API key |
 
 ---
@@ -116,7 +129,7 @@ En `.env` se puede agregar `LLM_PROVIDER=simulado` para trabajar sin IA, o
 `LLM_PROVIDER=gemini` para exigir Gemini.
 
 ## Cómo funciona (resumen para explicarlo)
-1. La interfaz envía `ingredientes` y `comensales` a `POST /api/receta`.
+1. El usuario inicia sesión. La interfaz envía `ingredientes` y `comensales` a `POST /api/receta`.
 2. `validacion.py` limpia los textos, quita duplicados y revisa los rangos.
 3. `llm_service.py` envía a Gemini el **system prompt** (reglas: minimizar desperdicio,
    no pedir compras, calcular cantidades, rechazar lo no comestible, tratar los
@@ -124,4 +137,4 @@ En `.env` se puede agregar `LLM_PROVIDER=simulado` para trabajar sin IA, o
 4. Se valida la respuesta (campos, unidades, comensales correctos) y se normalizan las
    cantidades. Si algo está mal, se muestra un error claro en lugar de una receta rota; si
    el problema es que Gemini no respondió, se ofrece continuar en modo simulado.
-5. `database.py` guarda la receta en el historial y la API la devuelve a la interfaz.
+5. `database.py` guarda la receta en el historial de ese usuario y la API la devuelve a la interfaz.

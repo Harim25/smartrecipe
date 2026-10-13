@@ -16,17 +16,52 @@
         <p>Cocina con lo que tienes y desperdicia menos.</p>
       </div>
     </div>
-    <nav class="menu" aria-label="Secciones">
+    <nav id="menu" class="menu" aria-label="Secciones" hidden>
       <button id="nav-cocinar" class="pestana activa" type="button" aria-current="page">Cocinar</button>
       <button id="nav-historial" class="pestana" type="button">Historial</button>
       <button id="nav-favoritas" class="pestana" type="button">Favoritas</button>
     </nav>
-    <span class="etiqueta-modo" title="Modelo que genera las recetas">
-      Modo: {{ proveedor }}
-    </span>
+    <div class="derecha">
+      <span class="etiqueta-modo" title="Modelo que genera las recetas">
+        Modo: {{ proveedor }}
+      </span>
+      <div id="cuenta" class="cuenta" hidden>
+        <span id="cuenta-usuario" class="cuenta-usuario"></span>
+        <button id="btn-salir" class="enlace" type="button">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
 
-  <main id="vista-cocinar" class="contenedor">
+  <!-- Acceso: se muestra mientras no hay sesión iniciada -->
+  <main id="vista-acceso" class="acceso" hidden>
+    <section class="tarjeta" aria-labelledby="t-acceso">
+      <img class="acceso-logo" src="{{ url_for('static', filename='logo_completo.png') }}" alt="SmartRecipe">
+      <div class="acceso-pestanas" role="tablist">
+        <button id="tab-entrar" class="pestana activa" type="button" role="tab" aria-selected="true">Iniciar sesión</button>
+        <button id="tab-registro" class="pestana" type="button" role="tab" aria-selected="false">Crear cuenta</button>
+      </div>
+      <h2 id="t-acceso" class="sr-only">Iniciar sesión</h2>
+      <form id="form-acceso" class="acceso-form">
+        <label for="acceso-usuario">Usuario</label>
+        <input id="acceso-usuario" type="text" maxlength="20" autocomplete="username"
+               autocapitalize="none" spellcheck="false" required>
+        <label for="acceso-password">Contraseña</label>
+        <input id="acceso-password" type="password" maxlength="128" autocomplete="current-password" required>
+        <div id="grupo-confirmar" hidden>
+          <label for="acceso-confirmar">Repite la contraseña</label>
+          <input id="acceso-confirmar" type="password" maxlength="128" autocomplete="new-password">
+        </div>
+        <p id="acceso-ayuda" class="ayuda" hidden>
+          Usuario: de 3 a 20 letras sin acento, números o guion bajo. Contraseña: al menos 8 caracteres.
+          No hay forma de recuperarla, así que guárdala bien.
+        </p>
+        <button id="btn-acceso" class="btn primario" type="submit">Entrar</button>
+        <p id="acceso-mensaje" class="mensaje" role="alert" hidden></p>
+      </form>
+    </section>
+  </main>
+
+  <main id="vista-cocinar" class="contenedor" hidden>
     <section class="tarjeta" aria-labelledby="t-cocina">
       <h2 id="t-cocina">1. Tus ingredientes</h2>
 

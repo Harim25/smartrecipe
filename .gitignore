@@ -9,6 +9,7 @@ __pycache__/
 # Claves y secretos (NUNCA subir la API key)
 .env
 *.key
+.clave_sesion
 
 # Capturas anteriores
 capturas_anteriores/

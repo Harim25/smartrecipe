@@ -8,23 +8,31 @@ const estado = {
   recetaActual: null,    // última receta mostrada
   pestana: "cocinar",    // "cocinar" | "historial" | "favoritas"
   generando: false,      // evita enviar dos peticiones a la vez
+  usuario: null,         // nombre de la cuenta con sesión iniciada
+  acceso: "entrar",      // formulario visible: "entrar" | "registro"
 };
 
 const $ = (id) => document.getElementById(id);
 
 // ---------- API ----------
 async function api(url, opciones = {}) {
+  const { esAcceso, ...resto } = opciones; // esAcceso es nuestro, no de fetch
   const resp = await fetch(url, {
     headers: { "Content-Type": "application/json" },
-    ...opciones,
+    ...resto,
   });
   if (resp.status === 204) return null;
   const datos = await resp.json();
+  if (resp.status === 401 && !esAcceso) {
+    // La sesión caducó o se cerró en otra pestaña: se vuelve a la pantalla de acceso.
+    mostrarAcceso("Tu sesión terminó. Vuelve a iniciar sesión.");
+  }
   if (!resp.ok) {
     // Se conservan los datos del error (tipo, ofrecer_simulado) para decidir qué mostrar.
     const error = new Error(datos.error || "Ocurrió un error.");
     error.tipo = datos.tipo;
     error.ofrecerSimulado = !!datos.ofrecer_simulado;
+    error.sesion = resp.status === 401 && !esAcceso;
     throw error;
   }
   return datos;
@@ -371,13 +379,118 @@ function cambiarPestana(nombre) {
     if (activa) $("nav-" + n).setAttribute("aria-current", "page");
     else $("nav-" + n).removeAttribute("aria-current");
   }
-  $("vista-cocinar").hidden = nombre !== "cocinar";
-  $("vista-lista").hidden = nombre === "cocinar";
+  vista(nombre === "cocinar" ? "vista-cocinar" : "vista-lista");
   if (nombre !== "cocinar") {
     $("t-historial").textContent = nombre === "favoritas" ? "Favoritas" : "Historial";
     cargarHistorial();
   }
   window.scrollTo({ top: 0 });
+}
+
+// ---------- Cuentas ----------
+function vista(visible) {
+  for (const id of ["vista-acceso", "vista-cocinar", "vista-lista"]) $(id).hidden = id !== visible;
+}
+
+function mensajeAcceso(texto) {
+  $("acceso-mensaje").textContent = texto || "";
+  $("acceso-mensaje").hidden = !texto;
+}
+
+function cambiarAcceso(modo) {
+  estado.acceso = modo;
+  const registro = modo === "registro";
+  $("tab-entrar").classList.toggle("activa", !registro);
+  $("tab-registro").classList.toggle("activa", registro);
+  $("tab-entrar").setAttribute("aria-selected", String(!registro));
+  $("tab-registro").setAttribute("aria-selected", String(registro));
+  $("t-acceso").textContent = registro ? "Crear cuenta" : "Iniciar sesión";
+  $("grupo-confirmar").hidden = !registro;
+  $("acceso-ayuda").hidden = !registro;
+  $("acceso-password").autocomplete = registro ? "new-password" : "current-password";
+  $("btn-acceso").textContent = registro ? "Crear cuenta" : "Entrar";
+  mensajeAcceso("");
+}
+
+// Borra de la pantalla todo lo que pertenece a la cuenta anterior.
+function limpiarDatos() {
+  estado.usuario = null;
+  estado.ingredientes = [];
+  estado.recetaActual = null;
+  estado.comensales = 2;
+  $("comensales").textContent = 2;
+  pintarIngredientes();
+  $("lista-despensa").replaceChildren();
+  $("lista-historial").replaceChildren();
+  mostrarPanel("receta-vacia");
+  mostrarMensaje("");
+}
+
+function mostrarAcceso(texto = "") {
+  limpiarDatos();
+  $("menu").hidden = true;
+  $("cuenta").hidden = true;
+  vista("vista-acceso");
+  $("acceso-password").value = "";
+  $("acceso-confirmar").value = "";
+  mensajeAcceso(texto);
+}
+
+function entrar(usuario) {
+  estado.usuario = usuario;
+  $("cuenta-usuario").textContent = usuario;
+  $("cuenta").hidden = false;
+  $("menu").hidden = false;
+  $("form-acceso").reset();
+  cambiarPestana("cocinar");
+  cargarDespensa();
+}
+
+async function enviarAcceso(e) {
+  e.preventDefault();
+  const registro = estado.acceso === "registro";
+  const usuario = $("acceso-usuario").value.trim();
+  const password = $("acceso-password").value;
+  if (registro && password !== $("acceso-confirmar").value) {
+    mensajeAcceso("Las contraseñas no coinciden.");
+    return;
+  }
+  const boton = $("btn-acceso");
+  boton.disabled = true;
+  mensajeAcceso("");
+  try {
+    const datos = await api(registro ? "/api/registro" : "/api/sesion", {
+      method: "POST",
+      body: JSON.stringify({ usuario, password }),
+      esAcceso: true,
+    });
+    entrar(datos.usuario);
+  } catch (err) {
+    mensajeAcceso(
+      err instanceof TypeError ? "No se pudo contactar al servidor de SmartRecipe." : err.message
+    );
+  } finally {
+    boton.disabled = false;
+  }
+}
+
+async function cerrarSesion() {
+  try {
+    await api("/api/sesion", { method: "DELETE", esAcceso: true });
+  } finally {
+    mostrarAcceso();
+  }
+}
+
+async function iniciar() {
+  cambiarAcceso("entrar");
+  try {
+    const datos = await api("/api/sesion", { esAcceso: true });
+    if (datos.usuario) entrar(datos.usuario);
+    else mostrarAcceso();
+  } catch (err) {
+    mostrarAcceso("No se pudo contactar al servidor de SmartRecipe.");
+  }
 }
 
 // ---------- Eventos ----------
@@ -400,6 +513,24 @@ $("nav-cocinar").addEventListener("click", () => cambiarPestana("cocinar"));
 $("nav-historial").addEventListener("click", () => cambiarPestana("historial"));
 $("nav-favoritas").addEventListener("click", () => cambiarPestana("favoritas"));
 
+$("form-acceso").addEventListener("submit", enviarAcceso);
+$("tab-entrar").addEventListener("click", () => cambiarAcceso("entrar"));
+$("tab-registro").addEventListener("click", () => cambiarAcceso("registro"));
+$("btn-salir").addEventListener("click", cerrarSesion);
+
+// Errores de acciones secundarias (favoritas, borrar, despensa) que nadie atrapó:
+// si fue por la sesión ya se mostró el acceso; los demás se avisan al usuario.
+window.addEventListener("unhandledrejection", (evento) => {
+  const error = evento.reason;
+  evento.preventDefault();
+  if (error && error.sesion) return;
+  mostrarMensaje(
+    error instanceof TypeError
+      ? "No se pudo contactar al servidor de SmartRecipe."
+      : (error && error.message) || "Ocurrió un error."
+  );
+});
+
 // ---------- Inicio ----------
 pintarIngredientes();
-cargarDespensa();
+iniciar();
