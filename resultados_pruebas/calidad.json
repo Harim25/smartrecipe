@@ -1,0 +1,1037 @@
+[
+  {
+    "id": "L01",
+    "descripcion": "Máximo de ingredientes (20)",
+    "ingredientes_enviados": [
+      "pollo",
+      "arroz",
+      "frijol",
+      "jitomate",
+      "cebolla",
+      "ajo",
+      "zanahoria",
+      "papa",
+      "calabacita",
+      "elote",
+      "queso",
+      "crema",
+      "huevo",
+      "tortilla",
+      "chile",
+      "limón",
+      "cilantro",
+      "aguacate",
+      "lechuga",
+      "pasta"
+    ],
+    "comensales": 4,
+    "esperado": "receta coherente; no tiene que usar los 20, pero sí explicar lo que deja fuera",
+    "resultado": "OK",
+    "segundos": 20.49,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Guisado de Pollo con Verduras Campestres, Arroz a la Mexicana y Guarnición Completa",
+      "comensales": 4,
+      "ingredientes": [
+        {
+          "nombre": "pechuga de pollo cortada en cubos",
+          "cantidad": 600,
+          "unidad": "g"
+        },
+        {
+          "nombre": "arroz",
+          "cantidad": 240,
+          "unidad": "g"
+        },
+        {
+          "nombre": "frijoles cocidos",
+          "cantidad": 300,
+          "unidad": "g"
+        },
+        {
+          "nombre": "jitomate",
+          "cantidad": 3,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "cebolla",
+          "cantidad": 1,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "dientes de ajo",
+          "cantidad": 3,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "zanahoria",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "papa",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "calabacita",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "granos de elote",
+          "cantidad": 150,
+          "unidad": "g"
+        },
+        {
+          "nombre": "huevo",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "lechuga fileteada",
+          "cantidad": 150,
+          "unidad": "g"
+        },
+        {
+          "nombre": "aguacate",
+          "cantidad": 1,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "queso",
+          "cantidad": 120,
+          "unidad": "g"
+        },
+        {
+          "nombre": "crema",
+          "cantidad": 100,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "chile",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "limón",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "cilantro fresco picado",
+          "cantidad": 20,
+          "unidad": "g"
+        },
+        {
+          "nombre": "tortillas de maíz",
+          "cantidad": 8,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 40,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 1200,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Poner a cocer los dos huevos en agua hirviendo durante 10 minutos; enfriar, pelar, picar en cubos y reservar.",
+        "Licuar 2 jitomates con media cebolla, 2 dientes de ajo y 500 ml de agua con una pizca de sal para preparar el caldillo del arroz.",
+        "En una cacerola, calentar 15 ml de aceite y sofreír el arroz hasta que tome un tono dorado ligero; verter el caldillo licuado, tapar y cocinar a fuego bajo durante 20 minutos hasta que el líquido se absorba.",
+        "En una sartén amplia u olla, calentar 15 ml de aceite y sellar el pollo salpimentado a fuego medio-alto durante 6 minutos hasta dorar.",
+        "Picar en cubos pequeños la zanahoria y la papa; agregarlas al pollo junto con 300 ml de agua, tapar y dejar cocer por 8 minutos.",
+        "Cortar la calabacita en cubos y sumarla al guisado junto con los granos de elote, el jitomate restante picado, la otra mitad de la cebolla picada, un diente de ajo picado finamente y los chiles en rodajas. Cocinar 7 minutos más hasta que todo esté tierno.",
+        "Calentar los frijoles en una sartén pequeña con 10 ml de aceite, machacándolos ligeramente al gusto.",
+        "Preparar una ensalada fresca mezclando la lechuga, el huevo cocido picado, el cilantro, el aguacate en rebanadas y el jugo de los limones, sazonando con una pizca de sal y pimienta.",
+        "Calentar las tortillas de maíz en un comal.",
+        "Servir el guisado de pollo con verduras acompañado del arroz a la mexicana, los frijoles y la ensalada fresca; coronar con crema y queso espolvoreado."
+      ],
+      "tiempo_minutos": 45,
+      "nota": "Se excluyó la pasta de esta preparación para mantener un plato equilibrado y armónico sin duplicar innecesariamente fuentes de almidón junto al arroz y las tortillas.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 20.49
+      }
+    }
+  },
+  {
+    "id": "L02",
+    "descripcion": "Máximo de comensales (20)",
+    "ingredientes_enviados": [
+      "pollo",
+      "arroz",
+      "zanahoria"
+    ],
+    "comensales": 20,
+    "esperado": "cantidades para 20 personas (kilos de pollo y arroz)",
+    "resultado": "OK",
+    "segundos": 23.39,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Arroz con Pollo y Zanahoria a Gran Escala",
+      "comensales": 20,
+      "ingredientes": [
+        {
+          "nombre": "pollo (troceado)",
+          "cantidad": 3500,
+          "unidad": "g"
+        },
+        {
+          "nombre": "arroz",
+          "cantidad": 1600,
+          "unidad": "g"
+        },
+        {
+          "nombre": "zanahoria",
+          "cantidad": 1200,
+          "unidad": "g"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 150,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 3600,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Lavar, pelar y cortar las zanahorias en dados pequeños o rodajas finas.",
+        "Cortar el pollo en trozos de tamaño bocado y salpimentar al gusto.",
+        "En una olla grande o cazuela amplia, calentar el aceite a fuego medio-alto y sellar el pollo hasta que esté dorado por todos lados (aproximadamente 10-12 minutos).",
+        "Añadir la zanahoria a la olla y sofreír junto con el pollo durante 5 minutos para que empiece a ablandarse.",
+        "Incorporar el arroz y remover durante 2 minutos para nacararlo y que absorba los sabores del fondo de cocción.",
+        "Verter el agua, rectificar de sal y pimienta, y llevar a ebullición.",
+        "Reducir el fuego a medio-bajo, tapar la olla y dejar cocinar durante 18-20 minutos hasta que el arroz esté tierno y haya absorbido el líquido.",
+        "Retirar del fuego, dejar reposar tapado durante 5 minutos y servir caliente repartiendo equitativamente entre los 20 comensales."
+      ],
+      "tiempo_minutos": 45,
+      "nota": "Se han escalado las cantidades de pollo, arroz y zanahoria proporcionalmente para abastecer a 20 personas, utilizando únicamente los básicos de despensa permitidos.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 23.39
+      }
+    }
+  },
+  {
+    "id": "L03",
+    "descripcion": "Faltas de ortografía",
+    "ingredientes_enviados": [
+      "poyo",
+      "aros",
+      "sevolla",
+      "jitomate"
+    ],
+    "comensales": 2,
+    "esperado": "entiende pollo, arroz y cebolla",
+    "resultado": "OK",
+    "segundos": 44.25,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Arroz con Pollo y Salsa de Jitomate",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "Pollo (pechuga o muslo en trozos)",
+          "cantidad": 350,
+          "unidad": "g"
+        },
+        {
+          "nombre": "Arroz",
+          "cantidad": 160,
+          "unidad": "g"
+        },
+        {
+          "nombre": "Jitomate",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "Cebolla",
+          "cantidad": 0.5,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "Aceite vegetal",
+          "cantidad": 20,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "Agua",
+          "cantidad": 400,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "Sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "Pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Lavar y cortar los jitomates y la cebolla. Licuar los jitomates con la mitad de la cebolla picada y unos 100 ml de agua para formar una salsa homogénea.",
+        "Salpimentar los trozos de pollo al gusto.",
+        "En una cacerola amplia, calentar el aceite a fuego medio y dorar las piezas de pollo por todos sus lados durante 6-8 minutos. Retirar el pollo y reservar.",
+        "En la misma cacerola con el aceite restante, sofreír el resto de la cebolla picada finamente y añadir el arroz, removiendo constantemente hasta que tome un tono dorado ligero.",
+        "Verter la salsa de jitomate sobre el arroz y cocinar por 2 minutos hasta que cambie de color y reduzca ligeramente.",
+        "Reincorporar el pollo a la cacerola, verter los 300 ml restantes de agua caliente y rectificar la sal.",
+        "Tapar, bajar el fuego al mínimo y cocinar durante 15 a 18 minutos, o hasta que el líquido se haya absorbido y el arroz esté tierno.",
+        "Apagar el fuego, dejar reposar tapado durante 5 minutos y servir caliente."
+      ],
+      "tiempo_minutos": 35,
+      "nota": "Se interpretaron los ingredientes con errores ortográficos como pollo, arroz, cebolla y jitomate, complementándolos con los básicos de despensa permitidos.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 44.25
+      }
+    }
+  },
+  {
+    "id": "L04",
+    "descripcion": "Ingredientes en inglés",
+    "ingredientes_enviados": [
+      "chicken",
+      "rice",
+      "onion"
+    ],
+    "comensales": 2,
+    "esperado": "receta en español con esos ingredientes",
+    "resultado": "OK",
+    "segundos": 15.96,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Arroz con pollo y cebolla dorada",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "Pollo",
+          "cantidad": 350,
+          "unidad": "g"
+        },
+        {
+          "nombre": "Arroz",
+          "cantidad": 160,
+          "unidad": "g"
+        },
+        {
+          "nombre": "Cebolla",
+          "cantidad": 1,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "Aceite",
+          "cantidad": 20,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "Agua",
+          "cantidad": 400,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "Sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "Pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Cortar el pollo en trozos de tamaño bocado y picar la cebolla finamente. Sazonar el pollo con sal y pimienta al gusto.",
+        "Calentar el aceite en una cazuela o sartén honda a fuego medio-alto y dorar los trozos de pollo durante 5 a 6 minutos hasta que tomen buen color. Retirar y reservar.",
+        "En la misma cazuela con los jugos del pollo, sofreír la cebolla a fuego medio durante 5 minutos hasta que esté tierna y translúcida.",
+        "Agregar el arroz a la cazuela y rehogar durante 1 a 2 minutos junto con la cebolla para nacararlo.",
+        "Reincorporar el pollo a la cazuela, verter el agua y ajustar con una pizca de sal y pimienta.",
+        "Llevar a ebullición, luego reducir el fuego al mínimo, tapar y cocinar durante 16 a 18 minutos hasta que el arroz esté tierno y haya absorbido el líquido.",
+        "Retirar del fuego y dejar reposar tapado durante 5 minutos antes de servir."
+      ],
+      "tiempo_minutos": 35,
+      "nota": "Se aprovecha el fondo de cocción del dorado del pollo y la cebolla para brindar sabor y aroma al arroz utilizando únicamente básicos de despensa.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 15.96
+      }
+    }
+  },
+  {
+    "id": "L05",
+    "descripcion": "Solo condimentos",
+    "ingredientes_enviados": [
+      "sal",
+      "azúcar"
+    ],
+    "comensales": 2,
+    "esperado": "rechaza o explica que no alcanza para un platillo",
+    "resultado": "OK",
+    "segundos": 38.46,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Caramelos crujientes con toque de sal",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "azúcar",
+          "cantidad": 100,
+          "unidad": "g"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 35,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 5,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Unta el aceite con un papel absorbente sobre una superficie resistente al calor (como papel vegetal o una bandeja metálica) para evitar que el caramelo se pegue.",
+        "Coloca el azúcar y el agua en un cazo pequeño a fuego medio, sin remover con cuchara para evitar que cristalice, solo moviendo ligeramente el cazo si es necesario.",
+        "Cocina la mezcla durante 8 a 10 minutos hasta que tome un tono dorado ámbar.",
+        "Retira inmediatamente del fuego y vierte el caramelo con cuidado sobre la superficie engrasada formando pequeñas porciones o una capa fina.",
+        "Espolvorea una pizca muy ligera de sal sobre el caramelo caliente antes de que solidifique por completo.",
+        "Deja enfriar a temperatura ambiente durante 10 minutos hasta que esté duro y crujiente antes de servir."
+      ],
+      "tiempo_minutos": 20,
+      "nota": "Al disponer únicamente de azúcar y sal entre los ingredientes proporcionados, se optó por elaborar caramelos duros artesanales utilizando agua y una mínima cantidad de aceite de la despensa para la cocción y el desmoldado.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 38.46
+      }
+    }
+  },
+  {
+    "id": "L06",
+    "descripcion": "Carne que requiere cocción completa",
+    "ingredientes_enviados": [
+      "carne molida",
+      "lechuga",
+      "jitomate"
+    ],
+    "comensales": 2,
+    "esperado": "cuece bien la carne; no la sirve cruda",
+    "resultado": "OK",
+    "segundos": 15.65,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Tacos de lechuga con carne molida y jitomate",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "carne molida",
+          "cantidad": 300,
+          "unidad": "g"
+        },
+        {
+          "nombre": "jitomate",
+          "cantidad": 2,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "lechuga",
+          "cantidad": 1,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 15,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Lavar y desinfectar las hojas de lechuga con cuidado de mantenerlas enteras; escurrirlas y secarlas bien para usarlas como base.",
+        "Lavar y picar los jitomates en cubos pequeños.",
+        "Calentar el aceite en una sartén a fuego medio e incorporar la carne molida.",
+        "Cocinar la carne durante 6 a 8 minutos, desmenuzándola con una espátula hasta que esté cocida y comience a dorarse ligeramente.",
+        "Agregar el jitomate picado a la sartén, sazonar con sal y pimienta al gusto, y cocinar por 5 minutos más hasta que el jitomate se ablande y se integren los sabores.",
+        "Retirar del fuego y servir el guisado caliente dentro de las hojas de lechuga a modo de tacos o barquitas."
+      ],
+      "tiempo_minutos": 20,
+      "nota": "Se aprovechan las hojas frescas de lechuga como base para presentar la carne, logrando un platillo balanceado, ligero y sin necesidad de ingredientes adicionales.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 15.65
+      }
+    }
+  },
+  {
+    "id": "L07",
+    "descripcion": "Ingredientes dulces",
+    "ingredientes_enviados": [
+      "plátano",
+      "avena",
+      "leche",
+      "miel"
+    ],
+    "comensales": 3,
+    "esperado": "propone un postre o desayuno, no un guisado salado",
+    "resultado": "OK",
+    "segundos": 15.23,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Porridge cremoso de avena con plátano y miel",
+      "comensales": 3,
+      "ingredientes": [
+        {
+          "nombre": "avena en hojuelas",
+          "cantidad": 150,
+          "unidad": "g"
+        },
+        {
+          "nombre": "leche",
+          "cantidad": 600,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "plátano",
+          "cantidad": 3,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "miel",
+          "cantidad": 45,
+          "unidad": "g"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Pelar 1.5 plátanos y machacarlos con un tenedor hasta obtener un puré homogéneo. Cortar los 1.5 plátanos restantes en rodajas para decorar al final.",
+        "En una olla mediana a fuego medio, verter la leche, la avena en hojuelas, el puré de plátano y una pizca de sal.",
+        "Cocinar a fuego medio-bajo durante aproximadamente 8 a 10 minutos, removiendo continuamente con una cuchara de madera para evitar que se pegue al fondo, hasta que la mezcla adquiera una textura espesa y cremosa.",
+        "Retirar la olla del fuego e incorporar la mitad de la miel (unos 20-25 g), integrándola bien en la avena caliente.",
+        "Repartir la avena cremosa de manera equitativa en 3 boles.",
+        "Decorar cada porción con las rodajas de plátano reservadas y verter por encima el resto de la miel en hilo antes de servir."
+      ],
+      "tiempo_minutos": 15,
+      "nota": "Se aprovecha la fruta tanto cocida dentro de la avena para aportar dulzor y cremosidad natural, como fresca en la superficie para dar contraste de textura.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 15.23
+      }
+    }
+  },
+  {
+    "id": "K1-1",
+    "descripcion": "Desayuno (repetición 1)",
+    "ingredientes_enviados": [
+      "huevo",
+      "tortilla",
+      "frijol",
+      "queso"
+    ],
+    "comensales": 2,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 11.99,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Enfrijoladas rellenas de huevo con queso",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "huevo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "tortilla",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "frijol cocido",
+          "cantidad": 300,
+          "unidad": "g"
+        },
+        {
+          "nombre": "queso",
+          "cantidad": 80,
+          "unidad": "g"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 15,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 60,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Licuar o machacar los frijoles con el agua hasta obtener una salsa homogénea y ligera.",
+        "Verter la salsa de frijol en una olla pequeña a fuego medio, sazonar con sal al gusto y dejar que rompa en ligero hervor.",
+        "Batir los huevos en un tazón con una pizca de sal y pimienta.",
+        "Calentar la mitad del aceite en una sartén y cocinar los huevos revueltos hasta que cuajen al punto deseado; retirar y reservar.",
+        "En la misma sartén con el aceite restante, pasar las tortillas unos segundos por lado para suavizarlas sin que se endurezcan.",
+        "Sumergir cada tortilla en la salsa caliente de frijol, rellenar con una porción del huevo revuelto y doblar por la mitad.",
+        "Colocar dos enfrijoladas por plato, bañar con la salsa de frijol restante y coronar con el queso desmoronado o rallado."
+      ],
+      "tiempo_minutos": 20,
+      "nota": "Se aprovechan todos los ingredientes disponibles para lograr un platillo tradicional equilibrado y completo.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 11.99
+      }
+    }
+  },
+  {
+    "id": "K1-2",
+    "descripcion": "Desayuno (repetición 2)",
+    "ingredientes_enviados": [
+      "huevo",
+      "tortilla",
+      "frijol",
+      "queso"
+    ],
+    "comensales": 2,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 8.43,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Huevos sobre tortilla con frijoles y queso",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "huevo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "tortilla",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "frijol cocido",
+          "cantidad": 200,
+          "unidad": "g"
+        },
+        {
+          "nombre": "queso",
+          "cantidad": 80,
+          "unidad": "g"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 15,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "En una sartén pequeña, calentar los frijoles machacándolos ligeramente hasta obtener una consistencia suave y cremosa (puedes agregar un chorrito de agua si están muy secos). Mantener calientes.",
+        "En otra sartén, calentar la mitad del aceite y dorar ligeramente las tortillas por ambos lados sin que se pongan duras. Distribuir 2 tortillas por plato.",
+        "Untar una capa generosa de frijoles calientes sobre cada una de las tortillas.",
+        "Añadir el resto del aceite a la sartén y cocinar los huevos al gusto (estrellados o revueltos), sazonándolos con sal y pimienta.",
+        "Colocar un huevo sobre cada tortilla untada con frijol y terminar espolvoreando el queso rallado o desmoronado por encima para que se funda ligeramente con el calor. Servir de inmediato."
+      ],
+      "tiempo_minutos": 15,
+      "nota": "Se aprovechan todos los ingredientes para armar una versión clásica de huevos rancheros/campesinos, empleando únicamente aceite, sal y pimienta de la despensa básica.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 8.43
+      }
+    }
+  },
+  {
+    "id": "K1-3",
+    "descripcion": "Desayuno (repetición 3)",
+    "ingredientes_enviados": [
+      "huevo",
+      "tortilla",
+      "frijol",
+      "queso"
+    ],
+    "comensales": 2,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 11.03,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Enfrijoladas con huevo revuelto y queso",
+      "comensales": 2,
+      "ingredientes": [
+        {
+          "nombre": "huevo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "tortilla",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "frijol cocido",
+          "cantidad": 250,
+          "unidad": "g"
+        },
+        {
+          "nombre": "queso",
+          "cantidad": 80,
+          "unidad": "g"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 15,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 60,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Licúa o machaca los frijoles cocidos con el agua hasta obtener una salsa tersa y homogénea.",
+        "Calienta 5 ml de aceite en una sartén a fuego medio, vierte la salsa de frijol, sazona con sal y pimienta al gusto, y cocina durante 4 minutos hasta que hierva suavemente. Reserva caliente.",
+        "Bate los 4 huevos en un tazón con una pizca de sal y pimienta. Calienta 5 ml de aceite en otra sartén a fuego medio y cocina los huevos revolviendo suavemente hasta que alcancen el punto deseado.",
+        "En una sartén pequeña con los 5 ml restantes de aceite, pasa ligeramente las tortillas de ambos lados para suavizarlas sin que se doren de más.",
+        "Pasa cada tortilla por la salsa caliente de frijol, colócala en un plato y rellénala con una porción del huevo revuelto, doblándola por la mitad.",
+        "Baña las enfrijoladas con el resto de la salsa de frijol caliente y espolvorea el queso rallado o desmoronado por encima antes de servir."
+      ],
+      "tiempo_minutos": 20,
+      "nota": "Se aprovecharon todos los ingredientes para preparar un desayuno tradicional mexicano balanceado, utilizando los básicos de despensa indispensables para su elaboración.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 11.03
+      }
+    }
+  },
+  {
+    "id": "K2-1",
+    "descripcion": "Pasta (repetición 1)",
+    "ingredientes_enviados": [
+      "pasta",
+      "jitomate",
+      "ajo"
+    ],
+    "comensales": 4,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 21.2,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Pasta clásica con salsa rústica de jitomate y ajo",
+      "comensales": 4,
+      "ingredientes": [
+        {
+          "nombre": "pasta",
+          "cantidad": 400,
+          "unidad": "g"
+        },
+        {
+          "nombre": "jitomate",
+          "cantidad": 500,
+          "unidad": "g"
+        },
+        {
+          "nombre": "dientes de ajo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 40,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 2500,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Picar finamente los dientes de ajo y cortar los jitomates en cubos pequeños.",
+        "Poner a calentar el agua en una olla grande con una pizca de sal. Cuando rompa a hervir, agregar la pasta y cocinar según las instrucciones del empaque hasta que esté al dente (aproximadamente 8 a 10 minutos).",
+        "Mientras la pasta se cocina, calentar el aceite en una sartén amplia a fuego medio. Agregar el ajo picado y sofreír durante 1 minuto cuidando que no se queme.",
+        "Incorporar los jitomates picados a la sartén, sazonar con sal y pimienta al gusto, y cocinar a fuego medio-bajo durante 10 minutos hasta que los jitomates se hayan deshecho y formado una salsa rústica.",
+        "Escurrir la pasta reservando unas cucharadas del agua de cocción.",
+        "Integrar la pasta cocida a la sartén con la salsa de jitomate y ajo, añadir un chorrito del agua de cocción reservada y mezclar todo a fuego bajo durante 1 o 2 minutos para que se impregnen los sabores.",
+        "Servir caliente dividido en 4 porciones."
+      ],
+      "tiempo_minutos": 25,
+      "nota": "Se utilizó el agua de cocción de la pasta para emulsionar la salsa y lograr una textura más sedosa sin necesidad de agregar ingredientes adicionales.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 21.2
+      }
+    }
+  },
+  {
+    "id": "K2-2",
+    "descripcion": "Pasta (repetición 2)",
+    "ingredientes_enviados": [
+      "pasta",
+      "jitomate",
+      "ajo"
+    ],
+    "comensales": 4,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 7.97,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Pasta clásica con salsa rústica de jitomate y ajo",
+      "comensales": 4,
+      "ingredientes": [
+        {
+          "nombre": "pasta",
+          "cantidad": 400,
+          "unidad": "g"
+        },
+        {
+          "nombre": "jitomate",
+          "cantidad": 500,
+          "unidad": "g"
+        },
+        {
+          "nombre": "dientes de ajo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 30,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 3000,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Picar finamente los dientes de ajo y cortar los jitomates en cubos pequeños.",
+        "Poner a calentar los 3000 ml de agua con una pizca generosa de sal en una olla grande hasta que hierva.",
+        "Agregar la pasta al agua hirviendo y cocinar según el tiempo recomendado en el empaque (aproximadamente 8 a 10 minutos) hasta que esté al dente.",
+        "Mientras se cocina la pasta, calentar el aceite en una sartén amplia a fuego medio y sofreír el ajo durante 1 minuto con cuidado de que no se queme.",
+        "Incorporar el jitomate picado a la sartén, sazonar con sal y pimienta al gusto, y cocinar a fuego medio-bajo durante 10 minutos machacando ligeramente hasta obtener una salsa jugosa.",
+        "Escurrir la pasta reservando un par de cucharadas del agua de cocción.",
+        "Integrar la pasta y el agua reservada en la sartén con la salsa de jitomate, mezclar bien durante 1 minuto a fuego suave y servir caliente."
+      ],
+      "tiempo_minutos": 25,
+      "nota": "Se aprovecharon todos los ingredientes base junto con básicos de despensa para preparar un plato clásico, aromático y reconfortante.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 7.97
+      }
+    }
+  },
+  {
+    "id": "K2-3",
+    "descripcion": "Pasta (repetición 3)",
+    "ingredientes_enviados": [
+      "pasta",
+      "jitomate",
+      "ajo"
+    ],
+    "comensales": 4,
+    "esperado": "debe parecerse a las otras repeticiones",
+    "resultado": "OK",
+    "segundos": 8.96,
+    "mensaje": "",
+    "receta": {
+      "viable": true,
+      "titulo": "Pasta con salsa rústica de jitomate y ajo",
+      "comensales": 4,
+      "ingredientes": [
+        {
+          "nombre": "pasta",
+          "cantidad": 400,
+          "unidad": "g"
+        },
+        {
+          "nombre": "jitomate",
+          "cantidad": 500,
+          "unidad": "g"
+        },
+        {
+          "nombre": "dientes de ajo",
+          "cantidad": 4,
+          "unidad": "pieza"
+        },
+        {
+          "nombre": "aceite",
+          "cantidad": 30,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "agua",
+          "cantidad": 3000,
+          "unidad": "ml"
+        },
+        {
+          "nombre": "sal",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        },
+        {
+          "nombre": "pimienta",
+          "cantidad": 0,
+          "unidad": "al gusto"
+        }
+      ],
+      "pasos": [
+        "Picar finamente los dientes de ajo y cortar los jitomates en cubos pequeños.",
+        "Poner a calentar los 3000 ml de agua en una olla grande con una pizca de sal hasta que hierva.",
+        "Agregar la pasta al agua hirviendo y cocinar según las instrucciones del empaque hasta que quede al dente (aproximadamente 8-10 minutos).",
+        "Mientras la pasta se cocina, calentar el aceite en una sartén amplia a fuego medio-bajo y dorar ligeramente el ajo picado sin dejar que se queme.",
+        "Añadir los jitomates picados a la sartén, sazonar con sal y pimienta al gusto, y cocinar a fuego medio durante 10-12 minutos hasta que los jitomates se hayan deshecho y formado una salsa rústica.",
+        "Escurrir la pasta reservando un par de cucharadas del agua de cocción.",
+        "Incorporar la pasta y las cucharadas de agua reservada directamente en la sartén con la salsa, mezclando todo a fuego bajo durante 1 o 2 minutos para que los sabores se integren.",
+        "Servir caliente de inmediato."
+      ],
+      "tiempo_minutos": 25,
+      "nota": "Se aprovecharon todos los ingredientes base con los básicos indispensables de despensa (aceite, agua, sal y pimienta) para lograr una salsa clásica y reconfortante.",
+      "meta": {
+        "proveedor": "gemini",
+        "modelo": "gemini-3.8-flash",
+        "respaldo": false,
+        "segundos": 8.96
+      }
+    }
+  }
+]
