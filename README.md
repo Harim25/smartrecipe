@@ -43,6 +43,7 @@ su propia despensa, historial y favoritas; nadie puede ver ni borrar los datos d
 | `templates/`, `static/` | Interfaz (HTML, CSS y JavaScript) |
 | `tests/` | 89 pruebas automáticas (no usan internet ni gastan cuota) |
 | `.env.example` | Plantilla del archivo `.env` donde va la API key |
+| `DESPLIEGUE.md` | Guía paso a paso para publicar la aplicación en internet |
 
 ---
 

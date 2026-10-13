@@ -3,6 +3,7 @@
 Ejecutar:  python app.py   y abrir http://127.0.0.1:5000
 """
 
+import os
 from datetime import timedelta
 from functools import wraps
 
@@ -18,11 +19,16 @@ from validacion import (
     validar_comensales,
 )
 
+# PRODUCCION=1 (en el archivo .env del servidor) indica que la aplicación está publicada
+# en internet con HTTPS. llm_service ya cargó el .env al importarse.
+EN_PRODUCCION = os.environ.get("PRODUCCION", "").strip().lower() in ("1", "true", "si", "sí")
+
 app = Flask(__name__)
 app.config.update(
     SECRET_KEY=cuentas.clave_de_sesion(),
     SESSION_COOKIE_HTTPONLY=True,     # el JavaScript de la página no puede leer la cookie
     SESSION_COOKIE_SAMESITE="Lax",    # otros sitios no pueden enviar peticiones con la sesión
+    SESSION_COOKIE_SECURE=EN_PRODUCCION,  # publicada: la cookie solo viaja por HTTPS
     PERMANENT_SESSION_LIFETIME=timedelta(days=7),
 )
 
@@ -169,4 +175,6 @@ def despensa_borrar(id_):
 db.iniciar_db()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # El modo de depuración solo se usa al ejecutar en la computadora propia; nunca en
+    # producción, porque muestra el código y permite ejecutar instrucciones desde el navegador.
+    app.run(debug=not EN_PRODUCCION)
